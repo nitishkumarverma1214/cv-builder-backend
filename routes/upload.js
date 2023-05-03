@@ -27,7 +27,7 @@ var upload = multer({
   fileFilter: fileFilter,
 });
 router.post("/profile", upload.single("photo"), async (req, res) => {
-  console.log(req.file);
+  // console.log(req.file);
   try {
     const upload = await cloudinary.v2.uploader.upload(req.file.path);
     return res.json({
@@ -35,6 +35,7 @@ router.post("/profile", upload.single("photo"), async (req, res) => {
       file: upload.secure_url,
     });
   } catch (error) {
+    console.log(error);
     return res.status(400).send("Something went wrong");
   }
 
