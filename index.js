@@ -5,6 +5,7 @@ const passport = require("passport");
 const cors = require("cors");
 const app = express();
 const authRoute = require("./routes/auth");
+const uploadRoute = require("./routes/upload");
 const PORT = 5000;
 const passportSetup = require("./passport");
 const expressSession = require("express-session");
@@ -36,6 +37,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", authRoute);
+app.use("/upload", uploadRoute);
 app.get("/user", (req, res) => {
   res.send(req.user);
 });
