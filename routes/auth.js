@@ -3,6 +3,7 @@ const passport = require("passport");
 const User = require("../model/User");
 const generateToken = require("../config/generateToken");
 const bcrypt = require("bcrypt");
+const { validateEmail, validatePassword } = require("../utils/validator");
 router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
 
 router.get("/facebook", passport.authenticate("facebook"));
@@ -63,7 +64,12 @@ router.post(
       res.status(400);
       throw new Error("User already exists");
     }
-
+    if (!validateEmail(email)) {
+      return res.status(400).send("Email is not valid");
+    }
+    if (!validatePassword(password)) {
+      return res.status(400).send("Password is not valid");
+    }
     const salt = await bcrypt.genSalt(10);
 
     const hashPassword = await bcrypt.hash(password, salt);

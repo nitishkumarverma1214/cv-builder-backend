@@ -10,6 +10,7 @@ const PORT = 5000;
 const passportSetup = require("./passport");
 const expressSession = require("express-session");
 const connectDB = require("./config/db");
+const ensureAuthenticated = require("./middleware/auth/authentication");
 connectDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -37,8 +38,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", authRoute);
-app.use("/upload", uploadRoute);
-app.get("/user", (req, res) => {
+app.use("/upload", ensureAuthenticated, uploadRoute);
+app.get("/user", ensureAuthenticated, (req, res) => {
   res.send(req.user);
 });
 app.listen(PORT, () => {
